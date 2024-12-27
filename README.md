@@ -33,9 +33,6 @@ WEATHERAPI_KEY=your_weather_api_key
 docker compose up --build
 ```
 
-### **Acesse o endpoint**
-- Exemplo: http://localhost:8080/weather/00000001
-
 ### **Acesse o Zapkin**
 O zapkin estará rodando em http://localhost:9411
 
