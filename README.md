@@ -1,4 +1,4 @@
-# Weather Service - Integração open telemetry e zapkin
+# Weather Service - Integração Open Telemetry e Zapkin
 Este projeto é um serviço web desenvolvido em Go que recebe um CEP válido, identifica a cidade correspondente e retorna o clima atual com as temperaturas formatadas em Celsius, Fahrenheit e Kelvin utilizando Open Telemetry e Zapkin para observabilidade da aplicação!
 
 ## Requisitos do Sistema
