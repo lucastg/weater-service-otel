@@ -1,0 +1,71 @@
+version: '3'
+services:
+  jaeger-all-in-one:
+    image: jaegertracing/all-in-one:latest
+    restart: always
+    ports:
+      - "16686:16686"
+      - "14268"
+      - "14250"
+  
+  zipkin-all-in-one:
+    image: openzipkin/zipkin:latest
+    container_name: zipkin-all-in-one
+    restart: always
+    ports:
+      - "9411:9411"
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:latest
+    restart: always
+    volumes:
+      - ./.docker/prometheus.yaml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+
+  otel-collector:
+    image: otel/opentelemetry-collector:0.103.0    
+    restart: always
+    command: ["--config=/etc/otel-collector-config.yaml"]
+    volumes:
+      - ./.docker/otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "1888:1888"  
+      - "8888:8888"  
+      - "8889:8889"  
+      - "13133:13133"
+      - "4317:4317"  
+      - "55679:55679"
+
+  weather-microservice:
+    container_name: weather-microservice
+    build:
+      context: ./weather-microservice/.
+    environment:
+      - PORT=8081
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+      - ZIPKIN_URL=http://zipkin-all-in-one:9411/api/v2/spans
+    ports:
+      - "8081:8081"
+    depends_on:
+      - zipkin-all-in-one
+      - prometheus
+      - otel-collector
+
+  gateway-microservice:
+    container_name: gateway-microservice
+    build:
+      context: ./gateway-microservice/.
+    environment:
+      - PORT=8080
+      - WEATHER_API_URL=http://weather-microservice:8081
+      - ZIPKIN_URL=http://zipkin-all-in-one:9411/api/v2/spans
+    ports:
+      - "8080:8080"
+    depends_on:
+      - jaeger-all-in-one
+      - zipkin-all-in-one
+      - prometheus
+      - otel-collector
+      - weather-microservice
