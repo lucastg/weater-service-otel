@@ -25,16 +25,13 @@ Você pode executar o sistema dentro de um Docker Compose. Para isso, siga os pa
 - WeatherAPI: Obtenha uma chave em [WeatherAPI](https://www.weatherapi.com/).
 - Copie o arquivo **.env.exemplo** com o nome **.env**
 ```
-WEATHERAPI_KEY=your_weather_api_key
+WEATHER_API_KEY="SUA_CHAVE_AQUI"
 ```
 
 ## **Execute o Docker Compose**
 ```bash
 docker compose up --build
 ```
-
-### **Acesse o Zapkin**
-O zapkin estará rodando em http://localhost:9411
 
 ### Exemplo de requisição
 
@@ -45,6 +42,9 @@ curl --location 'http://localhost:8080/weather' \
     "cep": "81900120"
 }'
 ```
+
+### **Acesse o Zapkin**
+O zapkin estará rodando em http://localhost:9411
 
 # **Licença**
 Este projeto está licenciado sob a [Licença MIT](LICENSE).
